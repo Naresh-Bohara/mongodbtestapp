@@ -18,7 +18,10 @@ export class EmployeeService {
     private readonly profileModel: Model<Profile>,
   ) {}
 
-  async createEmployee(dto: CreateEmployeeDto) {
+  async createEmployee(dto: CreateEmployeeDto): Promise<{
+    message: string;
+    employee: Employee;
+  }> {
     const profile = await this.profileModel.create(dto.profile);
 
     const employee = await this.employeeModel.create({
@@ -32,7 +35,7 @@ export class EmployeeService {
     };
   }
 
-  async findAll() {
+  async findAll(): Promise<Employee[]> {
     return this.employeeModel.find().populate('profile').exec();
   }
 }
