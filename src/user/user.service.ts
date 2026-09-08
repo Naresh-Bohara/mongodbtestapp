@@ -10,7 +10,6 @@ export class UserService {
 
     async createUser():Promise<User>{
         const user = new this.userModel({
-
             name: "Naresh",
             address:{
                 street: "mohanpur",
