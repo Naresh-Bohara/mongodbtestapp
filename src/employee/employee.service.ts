@@ -1,33 +1,38 @@
-/* eslint-disable prettier/prettier */
+// employee.service.ts
+
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Employee } from './schemas/employee.schema';
 import { Model } from 'mongoose';
+
+import { Employee } from './schemas/employee.schema';
 import { Profile } from './schemas/profile.schema';
+import { CreateEmployeeDto } from './dto/create-employee.dto';
 
 @Injectable()
 export class EmployeeService {
-    constructor(
-        @InjectModel(Employee.name) private employeeModel:Model<Employee>,
-        @InjectModel(Profile.name) private profileModel:Model<Profile>,
-    ){}
+  constructor(
+    @InjectModel(Employee.name)
+    private readonly employeeModel: Model<Employee>,
 
-    async createEmployee():Promise<Employee>{
-        const profile = await new this.profileModel({
-            age:23,
-            qualification:"bachelors"
-        }).save();
+    @InjectModel(Profile.name)
+    private readonly profileModel: Model<Profile>,
+  ) {}
 
-        const employee = new this.employeeModel({
-            name:"Naresh",
-            profile:profile._id
-        })
+  async createEmployee(dto: CreateEmployeeDto) {
+    const profile = await this.profileModel.create(dto.profile);
 
-        return employee.save();
-    }
+    const employee = await this.employeeModel.create({
+      name: dto.name,
+      profile: profile._id,
+    });
 
+    return {
+      message: 'Employee created successfully',
+      employee,
+    };
+  }
 
-    async findAll():Promise<Employee[]>{
-        return this.employeeModel.find().populate('profile').exec();
-    }
+  async findAll() {
+    return this.employeeModel.find().populate('profile').exec();
+  }
 }

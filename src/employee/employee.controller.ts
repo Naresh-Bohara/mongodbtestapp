@@ -1,18 +1,22 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post } from '@nestjs/common';
+// employee.controller.ts
+
+import { Body, Controller, Get, Post } from '@nestjs/common';
+
 import { EmployeeService } from './employee.service';
+import { CreateEmployeeDto } from './dto/create-employee.dto';
 
 @Controller('employees')
 export class EmployeeController {
-    constructor(private readonly empService:EmployeeService){}
+  constructor(private readonly employeeService: EmployeeService) {}
 
-    @Post()
-    create(){
-        return this.empService.createEmployee();
-    }
+  @Post()
+  createEmployee(@Body() dto: CreateEmployeeDto) {
+    return this.employeeService.createEmployee(dto);
+  }
 
-    @Get()
-    getAll(){
-        return this.empService.findAll();
-    }
+  @Get()
+  getAllEmployees() {
+    return this.employeeService.findAll();
+  }
 }

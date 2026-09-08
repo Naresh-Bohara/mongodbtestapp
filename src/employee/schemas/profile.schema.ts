@@ -1,13 +1,14 @@
-/* eslint-disable prettier/prettier */
+// schemas/profile.schema.ts
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
 export class Profile extends Document {
-  @Prop()
+  @Prop({ required: true })
   age: number;
 
-  @Prop()
+  @Prop({ required: true })
   qualification: string;
 }
 
